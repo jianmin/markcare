@@ -51,7 +51,7 @@
 
 .hcontainer .hpanel {
   background: #fff; 
-  border: solid #666 1px; 
+  border: 1px solid #CCCCCC; 
   padding: 10px; 
   border-radius: 4px; 
   -moz-border-radius: 4px; 

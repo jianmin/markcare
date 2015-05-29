@@ -30,11 +30,6 @@ function($injector, $scope, $http, $filter, Registry, PatientService) {
 
   // The new patient to be added
   $scope.patient = {};
-
-  $scope.patient.first_name = 'Jianmin';
-  $scope.patient.last_name = 'Liu';
-  $scope.patient.ssn = '123456789';
-
   $scope.patient.created_by = $scope.user.user_name;
 
   var newPatientFormId = '#new-patient-form';

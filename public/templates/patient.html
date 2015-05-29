@@ -1,15 +1,16 @@
-<!-- toolbar -->
-<div class="btn-toolbar" role="toolbar" style="margin-bottom:5px">
-  <div class="btn-group">
-    <a role="button" class="btn btn-default" data-ng-click="tableParams.sorting({})">
-      <i class="fa fa-sort"></i> Clear Sorting</a>
-    <a role="button" class="btn btn-default" data-ng-click="tableParams.filter({})">
-      <i class="fa fa-sort"></i> Clear Filter</a>
+<div class="search-results-header">
+  <!-- toolbar -->
+  <div class="btn-toolbar" role="toolbar" style="margin-bottom:5px">
+    <div class="btn-group">
+      <a role="button" class="btn btn-default" data-ng-click="tableParams.sorting({})">
+        <i class="fa fa-sort"></i> Clear Sorting</a>
+      <a role="button" class="btn btn-default" data-ng-click="tableParams.filter({})">
+        <i class="fa fa-sort"></i> Clear Filter</a>
+    </div>
   </div>
+  <p><strong>Sorting:</strong> {{tableParams.sorting()|json}}</p>
+  <p><strong>Filter:</strong> {{tableParams.filter()|json}}</p>
 </div>
-
-<p><strong>Sorting:</strong> {{tableParams.sorting()|json}}</p>
-<p><strong>Filter:</strong> {{tableParams.filter()|json}}</p>
 
 <!-- grid -->
 <table ng-table="tableParams" class="table" show-filter="true">
@@ -21,7 +22,6 @@
       <td sortable="'first_name'" data-title="'First Name'" filter="{'first_name': 'text'}">{{patient.first_name}}</td>
       <td sortable="'last_name'" data-title="'Last Name'" filter="{'last_name': 'text'}">{{patient.last_name}}</td>
       <td sortable="'age'" data-title="'Age'">{{patient.age}}</td>
-      <td sortable="'dob'" data-title="'Date of Birth'">{{patient.dob}}</td>
       <td sortable="'gender'" data-title="'Gender'" style="width:100px;text-align:right;">{{patient.gender}}</td>
       <td data-title="'Upload'" class="text-center">
         <a class="editor-link" data-ng-click="gotoUploadView(patient.ssn)">

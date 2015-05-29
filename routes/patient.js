@@ -21,9 +21,10 @@ var rmdir = require('rimraf');
 
 var Util = require('../util/utils.js');
 
+// Will move this to the config fle.
 var MARKLOGIC_HOME = 'C:/marklogic/home';
 
-function getPatientHomeDirectory(ssn) {
+function getPatientHome(ssn) {
   return MARKLOGIC_HOME + '/patients/' + ssn;
 }
 
@@ -42,6 +43,7 @@ function selectPatient(req, res, data, callback, marklogic, dbconfig) {
         var document = documents[0];
         var patient = {};
 
+        // Returns all fields in the content.
         patient.ssn = document.content.ssn;
         patient.first_name = document.content.first_name;
         patient.last_name = document.content.last_name;
@@ -56,13 +58,14 @@ function selectPatient(req, res, data, callback, marklogic, dbconfig) {
         callback(new Error(res.__('patient_not_found')));
       }
     }, function(error) {
-      callback(new Error(JSON.stringify(error, null, 2)));
+      callback(new Error(JSON.stringify(error)));
     });
   } else {
     callback(new Error('SSN is missing'));
   }
 }
 
+// Adds a new patient
 function addPatient(req, res, callback, marklogic, dbconfig) {
   var ssn = req.body.ssn;
   var first_names = req.body.first_name;
@@ -73,7 +76,7 @@ function addPatient(req, res, callback, marklogic, dbconfig) {
   var address = req.body.address;
   var uri = '/patient/' + ssn + '.json';
 
-  var documents = [
+  var patient = [
     { uri: uri,
       content: {
         ssn: ssn,
@@ -89,30 +92,28 @@ function addPatient(req, res, callback, marklogic, dbconfig) {
 
   var db = marklogic.createDatabaseClient(dbconfig.server);
 
-  db.documents.write(documents).result( 
+  db.documents.write(patient).result( 
     function(response) {
-      console.log('A new patient has been added.');
-
       // Create a home directory for this patient.
-      var path = getPatientHomeDirectory(ssn);
+      var path = getPatientHome(ssn);
       mkdirp(path, function(err) {
-        // ignore any errors
         callback(null);
       });
     }, function(error) {
-      console.log(JSON.stringify(error, null, 2));
+      console.log(JSON.stringify(error));
       callback(error);
     }
   );
 }
 
+// Updates a patient
 function updatePatient(req, res, callback, marklogic, dbconfig) {
   console.log(req.body);
   // TO DO
   callback(null);
 }
 
-// Process search request
+// Processes search request
 function processSearchRequest(params, res, marklogic, dbconfig) {
   console.log("---->processSearchRequest");
   console.log(params);
@@ -147,16 +148,14 @@ function processSearchRequest(params, res, marklogic, dbconfig) {
   var db = marklogic.createDatabaseClient(dbconfig.server);
   var qb = marklogic.queryBuilder;
 
+  // Query documents with Query By Example
   db.documents.query(
     qb.where(qb.byExample(criteria))
-  ).result( function(documents) {
-    console.log('Matches')
+  ).result(function(documents) {
     documents.forEach( function(document) {
-      console.log('\nURI: ' + document.uri);
-      console.log('First Name: ' + document.content.first_name);
-
       var patient = {};
 
+      // Returns all fields in the content.
       patient.ssn = document.content.ssn;
       patient.first_name = document.content.first_name;
       patient.last_name = document.content.last_name;
@@ -174,8 +173,7 @@ function processSearchRequest(params, res, marklogic, dbconfig) {
       patients: patients
     });
   }, function(error) {
-    console.log(JSON.stringify(error, null, 2));
-
+    console.log(JSON.stringify(error));
     res.json({
       success: false,
       message: 'ERROR',
@@ -184,9 +182,9 @@ function processSearchRequest(params, res, marklogic, dbconfig) {
   });
 }
 
-function listPatientFiles(req, res, data, callback) {
+function getPatientTestResults(req, res, data, callback) {
   var ssn = req.params.ssn;
-  var dirPath = getPatientHomeDirectory(ssn);
+  var dirPath = getPatientHome(ssn);
 
   fs.readdir(dirPath, function(err, files) {
     var attachments = [];
@@ -287,9 +285,10 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
     var uri = '/patient/' + ssn + '.json';
     var db = marklogic.createDatabaseClient(dbconfig.server);
 
+    // Removes a patient document by uri
     db.documents.remove(uri).result(function(response) {
       // remove always returns success
-      var path = getPatientHomeDirectory(ssn);
+      var path = getPatientHome(ssn);
       rmdir(path, function(err) {
         res.json({
           success: true,
@@ -310,7 +309,7 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
     processSearchRequest(req.body, res, marklogic, dbconfig);
   });
 
-  // Retrieves attachments by project bid #
+  // Retrieves test results by ssn
   router.route('/attachments/:ssn').get(function(req, res) {
     var data = {};
     async.waterfall([
@@ -318,7 +317,7 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
         selectPatient(req, res, data, callback, marklogic, dbconfig);
       },
       function(data, callback) {
-        listPatientFiles(req, res, data, callback);
+        getPatientTestResults(req, res, data, callback);
       }
     ], function(err, result) {   
       if (err) {
@@ -338,14 +337,14 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
     });
   });
 
-  // Upload a file for the specified patient
+  // Uploads a file
   router.route('/attachment/upload').post(function(req, res) {
     var ssn = req.body.ssn;
     var name = req.files.data.originalname;
     var size = req.files.data.size;
 
     // Move the uploaded file to the project's home directory.
-    var filePath = getPatientHomeDirectory(ssn) + '/' + name;
+    var filePath = getPatientHome(ssn) + '/' + name;
     fs.rename(req.files.data.path, filePath, function(err) {
       res.json({
         success: true,
@@ -358,11 +357,11 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
     });
   });
 
-  // Deletes an attachment
+  // Deletes a file
   router.route('/attachment/:ssn/:filename').delete(function(req, res) {
     var ssn = req.params.ssn;
     var fileName = req.params.filename;
-    var filePath = getPatientHomeDirectory(ssn) + '/' + fileName;
+    var filePath = getPatientHome(ssn) + '/' + fileName;
 
     fs.unlink(filePath, function(err) {
       if (err) {
@@ -382,10 +381,11 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
     });
   });
 
+  // Downloads a file
   router.route('/attachment/download/:ssn/:filename').get(function(req, res) {
     var ssn = req.params.ssn;
     var fileName = req.params.filename;
-    var filePath = getPatientHomeDirectory(ssn) + '/' + fileName;
+    var filePath = getPatientHome(ssn) + '/' + fileName;
 
     fs.exists(filePath, function(exists) {
       if (!exists) {
@@ -395,7 +395,7 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
         return;
       }
 
-      // Set the content type
+      // Sets the content type
       var contentType = Util.getContentType(fileName);
       var contentDisposition = 'attachment;filename=' + fileName;
       res.writeHead(200, {
@@ -403,7 +403,7 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
         'Content-Disposition': contentDisposition
       });
 
-      // Stream the file
+      // Streams the file
       fs.createReadStream(filePath, 'utf-8').pipe(res);
     });
   });
@@ -411,6 +411,7 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
   // Retrieves a user by id
   router.route('/user/:id').get(function(req, res) {
     var id = req.params.id;
+    // Hard code for test purpose
     var user = {
       user_name: id,
       email: 'jianmin.liu@gmail.com',
