@@ -96,10 +96,11 @@ function($injector, $scope, $http, $filter, AppConfig, PageCache, PageService, P
       PatientService.update(params).then(function(response) {
         MessageCenter.showMessage(response.data.message);
 
-      if (response.data.success) {
-        // Notify the child controllers
-        $scope.$broadcast('PatientUpdated', $scope.patient.ssn);
-      }
+        if (response.data.success) {
+          $scope.hideModal(editPatientDialogId);
+          // Notify the child controllers
+          $scope.$broadcast('PatientUpdated', response.data.patient);
+        }
       });
     }
   };

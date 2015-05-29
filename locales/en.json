@@ -33,6 +33,7 @@
   "add_patient": "Add Patient",
   "edit_patient": "Edit Patient",
 
+  "patient_exists": "Patient already exists.",
   "patient_not_found": "Patient cannot be found.",
   "patient_added": "The patient has been added.",
   "failed_to_added_patient": "Failed to add the patient",

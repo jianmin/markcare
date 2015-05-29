@@ -28,7 +28,7 @@ function($injector, $scope, $http, $filter, NgTableParams, Registry, PatientServ
   $scope.patients = [];
 
   this.init = function() {
-    this.createTable();
+    //this.createTable();
   };
 
   this.createTable = function() {
@@ -64,15 +64,17 @@ function($injector, $scope, $http, $filter, NgTableParams, Registry, PatientServ
     PatientService.search(params).then(function(response) {
       MarkCare.Util.hidePageLoader();
 
-      if (!response.data.success)
-        MessageCenter.showMessage(response.data.message);
-
       $scope.patients.length = 0;
 
-      angular.extend($scope.patients, response.data.patients);
+      if (response.data.success) {
+        angular.extend($scope.patients, response.data.patients);
+        $scope.$broadcast('SearchResults', response.data.patients);
+      } else {
+        MessageCenter.showMessage(response.data.message);
+      }
 
-      $scope.tableParams.total($scope.patients.length);
-      $scope.tableParams.reload();
+      //$scope.tableParams.total($scope.patients.length);
+      //$scope.tableParams.reload();
     });
   };
 

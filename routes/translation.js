@@ -55,6 +55,7 @@ exports.init = function(router) {
         add_patient: res.__('add_patient'),
         edit_patient: res.__('edit_patient'),
 
+        patient_exists: res.__('patient_exists'),
         patient_not_found: res.__('patient_not_found'),
         patient_added: res.__('patient_added'),
         failed_to_add_patient: res.__('failed_to_add_patient'),

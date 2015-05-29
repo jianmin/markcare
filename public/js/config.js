@@ -185,8 +185,14 @@ app.directive('patientGrid', ['$compile', '$filter', 'NgTableParams', function($
     controller: function($scope) {
       $scope.contentUrl = 'templates/patient.html';
 
-      $scope.$on('PatientUpdated', function(event, args) {
-        // nothing to do
+      $scope.$on('PatientUpdated', function(event, patient) {
+        for (var index = 0; index < $scope.patients.length; index++)  {
+          if (patient.ssn === $scope.patients[index].ssn) {
+            angular.extend($scope.patients[index], patient);
+            break;
+          }
+        }
+        $scope.tableParams.reload();
       });
 
       $scope.$on('PatientDeleted', function(event, ssn) {
@@ -196,6 +202,14 @@ app.directive('patientGrid', ['$compile', '$filter', 'NgTableParams', function($
             break;
           }
         }
+        $scope.tableParams.total($scope.patients.length);
+        $scope.tableParams.reload();
+      });
+
+      $scope.$on('SearchResults', function(event, patients) {
+        $scope.patients.length = 0;
+        angular.extend($scope.patients, patients);
+
         $scope.tableParams.total($scope.patients.length);
         $scope.tableParams.reload();
       });

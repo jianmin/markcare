@@ -27,10 +27,13 @@ function getPatientHome(ssn) {
   return patientsDir + '/patients/' + ssn;
 }
 
-// Retrieves a patient by ssn
-function selectPatient(req, res, data, callback, marklogic, dbconfig) {
-  var ssn = req.params.ssn;
+function getPatientUri(ssn) {
+  var uri = '/patient/' + ssn + '.json';
+  return uri;
+}
 
+// Retrieves a patient by ssn
+function selectPatient(ssn, data, callback, marklogic, dbconfig) {
   if (ssn) {
     var db = marklogic.createDatabaseClient(dbconfig.server);
     var qb = marklogic.queryBuilder;
@@ -43,18 +46,20 @@ function selectPatient(req, res, data, callback, marklogic, dbconfig) {
         var patient = {};
 
         // Returns all fields in the content.
-        patient.ssn = document.content.ssn;
+        patient.ssn        = document.content.ssn;
         patient.first_name = document.content.first_name;
-        patient.last_name = document.content.last_name;
-        patient.gender = document.content.gender;
-        patient.age = document.content.age;
-        patient.dob = document.content.dob;
-        patient.address = document.content.address;
+        patient.last_name  = document.content.last_name;
+        patient.gender     = document.content.gender;
+        patient.age        = document.content.age;
+        patient.dob        = document.content.dob;
+        patient.address    = document.content.address;
 
         data.patient = patient;
         callback(null, data);
       } else {
-        callback(new Error(res.__('patient_not_found')));
+        // Patient not found
+        data.patient = null;
+        callback(null, data);
       }
     }, function(error) {
       callback(new Error(JSON.stringify(error)));
@@ -65,17 +70,19 @@ function selectPatient(req, res, data, callback, marklogic, dbconfig) {
 }
 
 // Adds a new patient
-function addPatient(req, res, callback, marklogic, dbconfig) {
-  var ssn = req.body.ssn;
+function insertPatient(req, res, data, callback, marklogic, dbconfig) {
+//console.log(data.patient);
+  var ssn         = req.body.ssn;
   var first_names = req.body.first_name;
-  var last_name = req.body.last_name;
-  var gender = req.body.gender;
-  var age = req.body.age;
-  var dob = req.body.dob;
-  var address = req.body.address;
-  var uri = '/patient/' + ssn + '.json';
+  var last_name   = req.body.last_name;
+  var gender      = req.body.gender;
+  var age         = req.body.age;
+  var dob         = req.body.dob;
+  var address     = req.body.address;
 
-  var patient = [
+  // This is the key for the patient.
+  var uri = getPatientUri(ssn);
+  var patientDoc = [
     { uri: uri,
       content: {
         ssn: ssn,
@@ -91,7 +98,7 @@ function addPatient(req, res, callback, marklogic, dbconfig) {
 
   var db = marklogic.createDatabaseClient(dbconfig.server);
 
-  db.documents.write(patient).result( 
+  db.documents.write(patientDoc).result( 
     function(response) {
       // Create a home directory for this patient.
       var path = getPatientHome(ssn);
@@ -107,15 +114,46 @@ function addPatient(req, res, callback, marklogic, dbconfig) {
 
 // Updates a patient
 function updatePatient(req, res, callback, marklogic, dbconfig) {
-  console.log(req.body);
-  // TO DO
-  callback(null);
+  var ssn         = req.body.ssn;
+  var first_names = req.body.first_name;
+  var last_name   = req.body.last_name;
+  var gender      = req.body.gender;
+  var age         = req.body.age;
+  var dob         = req.body.dob;
+  var address     = req.body.address;
+
+  // This is the primary key for the patient.
+  var uri = getPatientUri(ssn);
+  var patientDoc = [
+    { uri: uri,
+      content: {
+        ssn: ssn,
+        first_name: first_names,
+        last_name: last_name,
+        gender: gender,
+        age: age,
+        dob: dob,
+        address: address
+      }
+    }
+  ];
+
+  var db = marklogic.createDatabaseClient(dbconfig.server);
+
+  db.documents.write(patientDoc).result( 
+    function(response) {
+      callback(null, patientDoc[0].content);
+    }, function(error) {
+      console.log(JSON.stringify(error));
+      callback(error);
+    }
+  );
 }
 
 // Processes search request
 function processSearchRequest(params, res, marklogic, dbconfig) {
-  console.log("---->processSearchRequest");
-  console.log(params);
+  //console.log("---->processSearchRequest");
+  //console.log(params);
 
   var patients = [];
   var criteria = {};
@@ -155,13 +193,13 @@ function processSearchRequest(params, res, marklogic, dbconfig) {
       var patient = {};
 
       // Returns all fields in the content.
-      patient.ssn = document.content.ssn;
+      patient.ssn        = document.content.ssn;
       patient.first_name = document.content.first_name;
-      patient.last_name = document.content.last_name;
-      patient.gender = document.content.gender;
-      patient.age = document.content.age;
-      patient.dob = document.content.dob;
-      patient.address = document.content.address;
+      patient.last_name  = document.content.last_name;
+      patient.gender     = document.content.gender;
+      patient.age        = document.content.age;
+      patient.dob        = document.content.dob;
+      patient.address    = document.content.address;
 
       patients.push(patient);
     });
@@ -207,10 +245,12 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
 
   // Retrieves a patient by ssn
   router.route('/patient/:ssn').get(function(req, res) {
+    var ssn = req.params.ssn;
     var data = {};
+
     async.waterfall([
       function(callback) {
-        selectPatient(req, res, data, callback, marklogic, dbconfig);
+        selectPatient(ssn, data, callback, marklogic, dbconfig);
       }
     ], function(err, result) {   
       if (err) {
@@ -221,7 +261,7 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
       } else {
         res.json({
           success: true,
-          message: res.__('OK'),
+          message: 'OK',
           patient: result.patient
         });
       }
@@ -230,12 +270,22 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
 
   // Adds a new patient
   router.route('/patient').post(function(req, res) {
+    var ssn = req.body.ssn;
+    var data = {};
     var asyncTasks = [];
 
     // We don't actually execute the async action here
     // We add functions containing it to an array of "tasks"
     asyncTasks.push(function(callback) {
-      addPatient(req, res, callback, marklogic, dbconfig);
+      selectPatient(ssn, data, callback, marklogic, dbconfig);
+    });
+
+    asyncTasks.push(function(data1, callback) {
+      if (data1.patient) {
+        callback(new Error(res.__('patient_exists')));
+      } else {
+        insertPatient(req, res, data1, callback, marklogic, dbconfig);
+      }
     });
 
     // Now we have an array of functions doing async tasks
@@ -274,7 +324,8 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
       } else {
         res.json({
           success: true,
-          message: res.__('patient_updated')
+          message: res.__('patient_updated'),
+          patient: result
         });
       }
     });
@@ -312,10 +363,11 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
 
   // Retrieves test results by ssn
   router.route('/attachments/:ssn').get(function(req, res) {
+    var ssn = req.params.ssn;
     var data = {};
     async.waterfall([
       function(callback) {
-        selectPatient(req, res, data, callback, marklogic, dbconfig);
+        selectPatient(ssn, data, callback, marklogic, dbconfig);
       },
       function(data, callback) {
         getPatientTestResults(req, res, data, callback);
@@ -331,7 +383,7 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
         patient.attachments = result.attachments;
         res.json({
           success: true,
-          message: res.__('OK'),
+          message: 'OK',
           patient: patient
         });
       }
@@ -422,7 +474,7 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
 
     res.json({
       success: true,
-      message: res.__('OK'),
+      message: 'OK',
       user: user
     });
   });
