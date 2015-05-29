@@ -1,0 +1,64 @@
+{
+  "app_logo": "MarkCare",
+  "app_name": "MarkCare",
+  "app_copyright": "2015 MarkLogic, Inc. All Rights Reserved.",
+
+  "button_refresh": "Refresh",
+  "button_submit": "Submit",
+  "button_ok": "OK",
+  "button_cancel": "Cancel",
+  "button_close": "Close",
+  "button_apply": "Apply",
+  "button_save": "Save",
+  "button_edit": "Edit",
+  "button_delete": "Delete",
+  "button_upload": "Upload",
+  "button_search": "Search",
+
+  "settings": "Settings",
+  "not_authorized": "You're not authorized to access this function.",
+  "user_not_found": "User cannot be found.",
+  "empty_field": "You can't leave this empty.",
+  "mandatory_field": "Please note that the fields marked with asterisk <i class='fa fa-asterisk mandatory-field'></i> are mandatory.",
+  "integer_field": "Please enter an integer",
+  "choose_option": "Choose...",
+
+  "tab_patients": "Patients",
+  "tab_help": "Help",
+
+  "menu_add_patient": "Add Patient",
+  "menu_search_patients": "Search Patients",
+  "menu_about": "About MakrCare",
+
+  "add_patient": "Add Patient",
+  "edit_patient": "Edit Patient",
+
+  "patient_not_found": "Patient cannot be found.",
+  "patient_added": "The patient has been added.",
+  "failed_to_added_patient": "Failed to add the patient",
+  "patient_updated": "The patient has been updated.",
+  "patient_deleted": "The patient has been deleted.",
+  "failed_to_delete_patient": "Failed to delete the patient",
+
+  "clear_sorting": "Clear Sorting",
+  "clear_filter": "Clear Filter",
+
+  "first_name": "First Name",
+  "last_name": "Last Name",
+  "ssn": "SSN",
+  "gender": "Gender",
+  "age": "Age",
+  "dob": "Date of Birth",
+  "address": "Address",
+  "notes": "Notes",
+
+  "file_name": "File Name",
+  "file_size": "File Size",
+  "upload_test_results": "Upload Test Results",
+  "download_file": "Download",
+  "delete_file": "Delete",
+  "select_file": "Select File",
+  "no_file_chosen": "No file chosen",
+  "please_select_file": "Please select a file",
+  "file_size_limit": "File size must be 10MB or less."
+}

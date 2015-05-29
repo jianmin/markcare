@@ -1,0 +1,108 @@
+<div id="edit-patient-dialog" class="modal modal-wide" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{ui.edit_patient}}</h4>
+      </div>
+
+      <!-- Begin the modal-body -->
+      <div class="modal-body" patient-editor-setup="" style="padding-top:10px;">
+        <p ng-bind-html="ui.mandatory_field | to_trusted"></p>
+
+        <!-- Begin the edit form -->
+        <form id="edit-patient-form" name="edit-patient-form" 
+              role="form" class="form-horizontal" novalidate="novalidate">
+          <input type="hidden" name="ssn" value="{{patient.ssn}}">
+          <input type="hidden" name="modified_by" value="{{user.id}}">
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">{{ui.first_name}} <i class="fa fa-asterisk mandatory-field"></i></label>
+            <div class="col-sm-8">
+              <input data-ng-model="patient.first_name" 
+                     type="text" class="form-control" name="first_name" 
+                     data-parsley-required="true" 
+                     data-parsley-trigger="focusin change" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">{{ui.last_name}} <i class="fa fa-asterisk mandatory-field"></i></label>
+            <div class="col-sm-8">
+              <input data-ng-model="patient.last_name" 
+                     type="text" class="form-control" name="last_name" 
+                     data-parsley-required="true" 
+                     data-parsley-trigger="focusin change" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">{{ui.gender}} <i class="fa fa-asterisk mandatory-field"></i></label>
+            <div class="col-sm-8">
+              <select class="form-control" 
+                      data-ng-model="patient.gender_model" 
+                      data-ng-options="item.name for item in registry.genders">
+              </select>
+              <input type="hidden" name="gender" value="{{patient.gender_model.id}}" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">{{ui.age}} <i class="fa fa-asterisk mandatory-field"></i></label>
+            <div class="col-sm-8">
+              <input data-ng-model="patient.age" 
+                     type="text" class="form-control" name="age" 
+                     placeholder="{{ui.integer_field}}" 
+                     data-parsley-type="integer" 
+                     data-parsley-min="1" 
+                     data-parsley-required="true" 
+                     data-parsley-trigger="focusin change" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">{{ui.dob}} <i class="fa fa-asterisk mandatory-field"></i></label>
+            <div class="col-sm-8">
+              <div class="input-group" ng-controller="ProjectDatepickerController">
+                <input type="text" class="form-control" 
+                       data-ng-model="patient.dob" 
+                       data-parsley-required="true" 
+                       data-parsley-trigger="focusin change"
+                       datepicker-popup="{{dateFormat}}" 
+                       datepicker-options="dateOptions" 
+                       is-open="opened" 
+                       close-text="Close" />
+                <div class="input-group-btn" style="vertical-align:top;">
+                  <a type="button" class="btn btn-default" ng-click="open($event)">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                  </a>
+                </div>
+              </div>
+              <input type="hidden" name="dob" value="{{getDatetime(patient.dob)}}" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">{{ui.address}}</label>
+            <div class="col-sm-8">
+              <input data-ng-model="patient.address" type="text" class="form-control" name="address"></input>
+            </div>
+          </div>
+        </form> <!-- End the edit form -->
+        <div data-ng-include src="'includes/documents.html'"></div>
+      </div> <!-- End the modal-body -->
+
+      <div class="modal-footer">
+        <button class="btn btn-default navbar-left" ng-click="addPatientDocument()">
+          <i class="fa fa-plus"></i> Add Document
+        </button>
+        <button class="btn btn-primary" data-ng-click="updatePatient()">
+          <i class="fa fa-check"></i> {{ui.button_submit}}
+        </button>
+        <button class="btn btn-default" data-dismiss="modal">
+          <i class="fa fa-close"></i> {{ui.button_cancel}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

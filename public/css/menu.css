@@ -1,0 +1,129 @@
+/*
+ * @(#)menu.css
+ */
+
+/*
+ * Common styles 
+ *
+ * Author: Jianmin Liu
+ * Created: 2015/05/26
+ */
+
+body {
+  background-color: #e9ebec; /* #eee */
+}
+
+.sidebar-container {
+  width: 228px;
+  position: absolute;
+  float: left;
+  border-top: none;
+  border-left: none;
+}
+
+.main-content {
+  min-width: 400px;
+  position: relative;
+  background: #fff;
+  margin-left: 228px;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  border-left: 1px solid #ccc;
+}
+
+/* Tweaks for mobile */
+@media (max-width: 641px) {
+  .sidebar-container {
+    float: none;
+    width: auto;
+    position: relative;
+  }
+  .main-content {
+    margin: 0em;
+  }
+  h1 {
+    text-align: center;
+  }
+}
+
+.sidebar-nav {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: #e9ebec; /* #eee */
+}
+
+.sidebar-nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.sidebar-nav a,
+.sidebar-nav a:hover,
+.sidebar-nav a:focus,
+.sidebar-nav a:active {
+  outline: none;
+}
+
+.sidebar-nav ul li,
+.sidebar-nav ul a {
+  display: block;
+}
+
+.sidebar-nav ul a {
+  padding: 10px 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: #ddd;
+  color: #222;
+  font-weight: normal;
+}
+
+.sidebar-nav ul a:hover,
+.sidebar-nav ul a:focus,
+.sidebar-nav ul a:active {
+  text-decoration: none;
+  background-color: #ddd;
+}
+
+.sidebar-nav ul ul a {
+  padding: 10px 30px;
+  background-color: #f1f1fd;
+  color: #337ab7;
+}
+
+.sidebar-nav ul ul a:hover,
+.sidebar-nav ul ul a:focus,
+.sidebar-nav ul ul a:active {
+  background-color: #ffffee;
+  color: #337ab7;
+}
+
+.sidebar-nav-item {
+  padding-left: 5px;
+}
+
+.sidebar-nav-item-icon {
+  padding-right: 5px;
+}
+
+.mainbar {
+  overflow: auto;
+  position: relative;
+  margin: 0;
+  padding: 5px 20px 5px 10px;
+  background: white;
+}
+
+.header {
+}
+
+.header h1 {
+  margin: 0.5em 0em;
+  padding: 0em;
+
+  line-height: 1em;
+  font-size: 1.5em;
+  color: #333;
+}
+
+/* end of menu.css */

@@ -1,0 +1,63 @@
+<h1 class="page-title">Search Patients</h1>
+
+<p>This view allows you to search patients.</p>
+
+<div class="accordion">
+  <div id="accordion_heading_search" class="accordion-heading accordion-border-top">
+    <table>
+      <tbody>
+        <tr>
+          <td class="accordion-title">
+            <a data-ng-click="accordion('search')">
+              <i id="accordion_handle_search" class="fa fa-minus-square"></i>
+            </a>
+            Search Criteria
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="accordion_body_search" class="accordion-body accordion-border-bottom" style="display:block">
+    <form id="search-form" 
+          name="search-form" 
+          role="form"
+          novalidate="novalidate" style="width:400px;">
+      <!-- Begin the body -->
+      <div search-form-setup="">
+        <div class="form-group">
+          <label class="control-label">{{ui.ssn}}</label>
+          <input type="text" class="form-control" name="ssn" />
+        </div>
+
+        <div class="form-group">
+          <label class="control-label">{{ui.first_name}}</label>
+          <input type="text" class="form-control" name="first_name" />
+        </div>
+
+        <div class="form-group">
+          <label class="control-label">{{ui.last_name}}</label>
+          <input type="text" class="form-control" name="last_name" />
+        </div>
+
+        <div class="form-group">
+          <label class="control-label">{{ui.gender}}</label>
+          <div>
+            <select id="gender-selector" name="gender[]" multiple="multiple" class="form-control">
+              <option data-ng-repeat='item in registry.genders' value='{{item.id}}'>{{item.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div> <!-- End the body -->
+      <button class="btn btn-primary" data-ng-click="search()">
+        <span class="fa fa-search"></span> {{ui.button_search}}
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="search-results" data-ng-if="patients.length>0">
+  <patient-grid patients="patients" 
+    editor="showPatientEditor" 
+    remover="showPatientRemover"
+    uploader="gotoUploadView"></patient-grid>
+</div>

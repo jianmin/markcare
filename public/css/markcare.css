@@ -1,0 +1,246 @@
+
+/*
+ * @(#)markcare.css
+ */
+
+/*
+ * Styling the MarkCare Application.
+ *
+ * Author: Jianmin Liu
+ * Created: 2015/05/26
+ */
+
+body {
+  padding-top: 50px;
+}
+
+#loader {
+  z-index: 19999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("../images/loading.gif") no-repeat center center #ffffff;
+  opacity: 0.7;
+  cursor: wait;
+  display: block;
+}
+
+h1 {
+  color: #000000;
+  font-size: 3.5em;
+  line-height: 1.13em;
+  /*text-shadow: 0 0 2px #CCCCCC;*/
+  font-family: Georgia,serif;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 0;
+
+  padding-top: 0;
+  padding-bottom: 0.273em;
+}
+
+/* Removing the dotted outline */
+a, a:hover, a:active, a:focus {
+  /*outline: none;
+  text-decoration: none;*/
+}
+
+/* Override Bootstrap's container-fluid padding */
+.container-fluid {
+  margin: 0;
+  padding: 0;
+
+  padding-left: 0; /* 15px */
+  padding-right: 0; /* 15px */
+}
+
+.navbar .container-fluid {
+  padding-left: 15px;
+  padding-right: 20px;
+}
+
+.company-panel {
+  padding: 5px;
+}
+
+.editor-link {
+  cursor: pointer;
+}
+
+#message-center {
+  position: fixed;
+  top: 6px;
+  left: 0;
+  display: none;
+  z-index: 12300;
+}
+
+#message-center .close-message {
+  position: absolute !important;
+  top: 12px;
+  right: 4px;
+  color: #555;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.message-box {
+  color: white;
+  height: 39px;
+
+  font-size: 15px;
+  font-family: "helvetica neue", helvetica, arial, sans-serif;
+  font-weight: normal;
+  text-align: center;
+
+  padding: 8px 20px 8px 10px;
+  border: 1px solid #ce4100; /* #ce4100 #f24d00 */
+  background-color: #ce4100;
+
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+
+  z-index: 10000;
+}
+
+.form-message {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color: #f24d00;
+  font-weight: bold;
+}
+
+.help-inline {
+  padding-top: 8px;
+  color: red;
+}
+
+div.divider {
+  height: 100%;
+  height: 1px;
+  border-top: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+/* Overrite Bootstrap */
+
+.navbar {
+  margin-bottom: 2px;
+}
+
+.navbar-header img {
+  width: 96px;
+  /*height: 46px;*/
+}
+
+.navbar-inverse .logo-text {
+  margin-left: 1px;
+  font-weight: normal;
+  color: yellow;
+}
+
+.navbar-inverse {
+  background-image: none;
+  background-color: #3f51b5 !important;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+  color: white;
+}
+
+.navbar-btn {
+  margin-right: 8px;
+}
+
+.navbar-brand {
+  float: left;
+  padding-top: 15px;
+  padding-right: 15px;
+  padding-bottom: 5px;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+/*
+ * Modal dialog wrapper
+ */
+
+/* Bootstrap 3 Variable-Width Modal */
+/* http://codepen.io/DawsonMediaD/pen/byDqv */
+
+.modal.modal-wide .modal-dialog {
+  /*width: 900px;*/
+}
+
+.modal-wide .modal-body {
+  overflow-y: auto;
+  padding: 30px;
+}
+
+.modal-wide .modal-content {
+  /*width: 900px;*/
+}
+
+.highlight-row {
+  background-color: #ffc;
+}
+
+.background-white {
+  background-color: white;
+}
+
+.mandatory-field {
+  color: #e05314;
+}
+
+/* ngTable */
+.ng-table th {
+  text-align: left;
+}
+
+.ng-table th:last-child {
+  text-align: center;
+}
+
+.ng-table th:nth-last-child(3) {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+  width: 60px;
+}
+
+th.centered, td.centered {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.search-results {
+  margin-top: 10px;
+}
+
+/* flex wrapper */
+.flex-wrapper {
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.flex, .fx {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  min-width: 1px;
+}
+
+/* end of markcare.css */

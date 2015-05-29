@@ -1,0 +1,50 @@
+<div data-ng-if="documents.length>0">
+  <table class="table table-bordered table-condensed">
+    <tr style="font-weight: bold">
+      <td style="width:40%">Document Name</td>
+      <td style="width:30%">Document Description</td>
+      <td style="width:30%">Action</td>
+    </tr>
+    <tr ng-repeat="doc in documents">
+      <td class="lcentered">
+        <span editable-text="doc.name" 
+              e-name="name" 
+              e-form="docform" 
+              onbeforesave="validatePatientDocumentName($data)" 
+              e-required>
+          {{doc.name || 'empty'}}
+        </span>
+      </td>
+      <td class="lcentered">
+        <span editable-text="doc.description" 
+              e-name="description" 
+              e-form="docform" 
+              onbeforesave="validatePatientDocumentDescription($data)" 
+              e-required>
+          {{doc.description || 'empty'}}
+        </span>
+      </td>
+      <td style="white-space:nowrap">
+        <form editable-form name="docform" class="form-buttons form-inline"
+              onbeforesave="savePatientDocument($data)" 
+              ng-show="docform.$visible" 
+              shown="inserted == doc">
+          <button type="button" class="btn btn-success" 
+                  ng-disabled="docform.$waiting" 
+                  ng-click="docform.$submit()">
+            <i class="fa fa-check"></i> {{ui.button_apply}}</button>
+          <button type="button" class="btn btn-default" 
+                  ng-disabled="docform.$waiting" 
+                  ng-click="docform.$cancel()">
+            <i class="fa fa-close"></i> {{ui.button_cancel}}</button>
+        </form>
+        <div class="buttons" ng-show="!docform.$visible">
+          <button type="button" class="btn btn-success" ng-click="docform.$show()">
+            <i class="fa fa-pencil"></i> {{ui.button_edit}}</button>
+          <button type="button" class="btn btn-danger" ng-click="deletePatientDocument($index)">
+            <i class="fa fa-trash-o"></i> {{ui.button_delete}}</button>
+        </div>  
+      </td>
+    </tr>
+  </table>
+</div>

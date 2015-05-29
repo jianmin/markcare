@@ -1,0 +1,68 @@
+<h1 class="page-title">{{ui.upload_test_results}}</h1>
+
+<p>This view allows you to upload test results for the patient.</p>
+<p>SSN: <b>{{patient.ssn}}</b></p>
+<p>Name: <b>{{patient.first_name}} {{patient.last_name}}</b></p>
+
+<div class="table-responsive">
+  <table class="table table-bordered" 
+         style="max-width:600px;margin-bottom:10px;" 
+         data-ng-if="patient.attachments.length>0">
+    <thead>
+      <tr>
+        <th>{{ui.file_name}}</th>
+        <th>{{ui.file_size}}</th>
+        <th class="centered">{{ui.download_file}}</th>
+        <th class="centered">{{ui.delete_file}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-ng-repeat="attachment in patient.attachments">
+        <td>{{attachment.name}}</td>
+        <td class="rcentered">{{formatFileSize(attachment.size)}}</td>
+        <td class="centered">
+          <a class="editor-link" data-ng-click="downloadFile(attachment.name)">
+            <i class="fa fa-download"></i>
+          </a>
+        </td>
+        <td class="centered">
+          <a class="editor-link" data-ng-click="deleteFile(attachment.name)">
+            <i class="fa fa-trash-o"></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="input-wrapper">
+  <form id="file-form" name="file-form" style="max-width:600px;"
+        action="{{upload_action}}" method="post" 
+        enctype="multipart/form-data" 
+        role="form" novalidate="novalidate">
+    <input type="hidden" name="ssn" value="{{patient.ssn}}">
+    <div class="form-group">
+      <label>{{ui.please_select_file}}</label>
+      <div class="flex-wrapper" style="margin-top: 2px;">
+        <div class="flex">
+          <div class="note file-upload-note">{{ui.file_size_limit}}</div>
+          <ul class="qq-upload-list-selector qq-upload-list none"></ul>
+        </div>
+        <div style="margin-left:20px;">
+          <div class="file-upload-button-wrapper btn btn-success">
+            <span>{{ui.select_file}}</span>
+            <input type="file" name="data" onchange="onFileSelected(this, this.value)" />
+          </div>
+        </div>
+      </div>
+      <p>File chosen: {{logo.filename}}</p>
+    </div>
+    <div class="form-group">
+      <div>
+        <button class="btn btn-primary" 
+                data-ng-click="uploadFile()" 
+                ng-show="logo.show_upload_button">{{ui.button_upload}}</button>
+      </div>
+    </div>
+  </form>
+</div>

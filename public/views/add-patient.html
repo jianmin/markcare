@@ -1,0 +1,142 @@
+<h1 class="page-title">{{ui.add_patient}}</h1>
+
+<p>This view allows you to enter a new patient into the system.</p>
+<p ng-bind-html="ui.mandatory_field | to_trusted"></p>
+
+<div patient-form-setup="" style="max-width:600px;">
+  <div class="hcontainer">
+    <div class="hpanel">
+      <form id="new-patient-form" name="new-patient-form" role="form" class="form-horizontal" novalidate="novalidate">
+        <input type="hidden" name="created_by" value="{{patient.created_by}}" />
+        <div class="form-group">
+          <label class="col-sm-4 control-label">{{ui.first_name}} <i class="fa fa-asterisk mandatory-field"></i></label>
+          <div class="col-sm-8">
+            <input data-ng-model="patient.first_name" 
+                   type="text" class="form-control" name="first_name" 
+                   data-parsley-required="true"  
+                   data-parsley-trigger="focusin change" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-4 control-label">{{ui.last_name}} <i class="fa fa-asterisk mandatory-field"></i></label>
+          <div class="col-sm-8">
+            <input data-ng-model="patient.last_name" 
+                   type="text" class="form-control" name="last_name" 
+                   data-parsley-required="true" 
+                   data-parsley-trigger="focusin change" />
+          </div>
+        </div>
+
+        <div class="form-group has-feedback">
+          <label class="col-sm-4 control-label">{{ui.ssn}} <i class="fa fa-asterisk mandatory-field"></i></label>
+          <div class="col-sm-8">
+            <div class="input-group">
+              <input data-ng-model="patient.ssn" 
+                     type="text" class="form-control" 
+                     name="ssn"  
+                     placeholder="Social Security Number"
+                     data-parsley-required="true"
+                     data-parsley-type="digits" 
+                     data-parsley-trigger="focusin change" 
+                     data-parsley-minlength="9" 
+                     data-parsley-maxlength="9" />
+              <div class="input-group-btn" style="vertical-align:top;">
+                <a type="button" class="btn btn-default" data-ng-click="displaySSNDialog()">
+                  <i class="fa fa-question"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-4 control-label">{{ui.gender}} <i class="fa fa-asterisk mandatory-field"></i></label>
+          <div class="col-sm-8">
+            <select class="form-control" 
+                    data-ng-model="patient.gender_model" 
+                    data-ng-options="item.name for item in registry.genders"></select>
+            <input type="hidden" name="gender" value="{{patient.gender_model.id}}" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-4 control-label">{{ui.age}} <i class="fa fa-asterisk mandatory-field"></i></label>
+          <div class="col-sm-8">
+            <input data-ng-model="patient.age" 
+                   type="text" class="form-control" name="age" 
+                   placeholder="{{ui.integer_field}}" 
+                   data-parsley-type="integer" 
+                   data-parsley-min="1" 
+                   data-parsley-required="true" 
+                   data-parsley-trigger="focusin change" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-4 control-label">{{ui.dob}} <i class="fa fa-asterisk mandatory-field"></i></label>
+          <div class="col-sm-8">
+            <div class="input-group" ng-controller="ProjectDatepickerController">
+              <input type="text" class="form-control" 
+                     data-ng-model="patient.dob" 
+                     data-parsley-required="true" 
+                     data-parsley-trigger="focusin change"
+                     datepicker-popup="{{dateFormat}}" 
+                     datepicker-options="dateOptions" 
+                     is-open="opened" 
+                     close-text="Close" />
+              <div class="input-group-btn" style="vertical-align:top;">
+                <a type="button" class="btn btn-default" ng-click="open($event)">
+                  <i class="glyphicon glyphicon-calendar"></i>
+                </a>
+              </div>
+            </div>
+            <input type="hidden" name="dob" value="{{getDatetime(patient.dob)}}" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-4 control-label">{{ui.address}}</label>
+          <div class="col-sm-8">
+            <input data-ng-model="patient.dddress" type="text" class="form-control" name="address" />
+          </div>
+        </div>
+      </form>
+      <div data-ng-include src="'includes/documents.html'"></div>
+    </div> <!-- End hpanel -->
+  </div> <!-- End hcontainer -->
+</div>
+
+<div class="btn-toolbar" role="toolbar" style="margin-top:10px">
+  <div class="btn-group">
+    <button type="button" class="btn btn-default" ng-click="addPatientDocument()">
+      <i class="fa fa-plus"></i> Add Document
+    </button>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-primary" data-ng-click="addPatient()">
+      <span class="fa fa-check"></span> {{ui.button_submit}}
+    </button>
+  </div>
+</div>
+
+<div id="ssn-dialog" class="modal modal-wide" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Social Security Number</h4>
+      </div>
+      <div class="modal-body">
+        <p>In the United States, a Social Security number (SSN) is a nine-digit 
+           number issued to U.S. citizens, permanent residents, and 
+           temporary (working) residents.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">
+          <span class="fa fa-close"></span> {{ui.button_close}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
