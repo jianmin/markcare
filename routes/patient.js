@@ -21,11 +21,10 @@ var rmdir = require('rimraf');
 
 var Util = require('../util/utils.js');
 
-// Will move this to the config fle.
-var MARKLOGIC_HOME = 'C:/marklogic/home';
+var patientsDir = null;
 
 function getPatientHome(ssn) {
-  return MARKLOGIC_HOME + '/patients/' + ssn;
+  return patientsDir + '/patients/' + ssn;
 }
 
 // Retrieves a patient by ssn
@@ -203,6 +202,8 @@ function getPatientTestResults(req, res, data, callback) {
 }
 
 exports.init = function(router, root_directory, marklogic, dbconfig) {
+
+  patientsDir = root_directory;
 
   // Retrieves a patient by ssn
   router.route('/patient/:ssn').get(function(req, res) {
