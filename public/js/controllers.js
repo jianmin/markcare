@@ -16,9 +16,6 @@ function($injector, $scope, $http, PageCache) {
 
   $scope.connection = {};
 
-  this.init = function() {
-  };
-
   $scope.showProfile = function() {
     $scope.showModal('#profile-dialog');
   };
@@ -28,11 +25,10 @@ function($injector, $scope, $http, PageCache) {
     angular.extend($scope.connection, registry.connection);
     $scope.showModal('#settings-dialog');
   };
-
-  this.init();
 }]);
 
-app.controller('PersonController', ['$injector', '$scope', '$http', '$stateParams', 'AppConfig', 'BlueButtonService', 
+app.controller('PersonController', ['$injector', '$scope', '$http', '$stateParams', 
+'AppConfig', 'BlueButtonService', 
 function($injector, $scope, $http, $stateParams, AppConfig, BlueButtonService) {
   $injector.invoke(MyParentController, this, {
     $scope: $scope,
@@ -43,7 +39,10 @@ function($injector, $scope, $http, $stateParams, AppConfig, BlueButtonService) {
 
   MarkCare.Util.showPageLoader();
 
+  // Load the person.
   BlueButtonService.getPerson($scope.id).then(function(response) {
+    $scope.setupJsonViewer();
+
     MarkCare.Util.hidePageLoader();
 
     if (response.data.success) {
@@ -53,14 +52,19 @@ function($injector, $scope, $http, $stateParams, AppConfig, BlueButtonService) {
     }
   });
 
+  $scope.setupJsonViewer = function() {
+    jQuery('#json-dialog').on('show.bs.modal', function() {
+      var height = jQuery(window).height() - 200;
+      jQuery(this).find('.modal-body').css('max-height', height);
+    });
+  };
+
   $scope.showRecords = function() {
     $scope.showModal('#json-dialog');
 
-    var targetNode = document.getElementById('json-viewer');
-    targetNode.innerHTML = ""; 
-
+    var container = document.getElementById('json-viewer');
     var value = JSON.stringify($scope.person, null, 2); 
-    var codeMirrorEditor = CodeMirror(targetNode, {
+    var codeMirrorEditor = CodeMirror(container, {
       value: value,
       indentUnit: 4,
       lineNumbers: true,
@@ -115,10 +119,7 @@ function($injector, $scope, $http, BlueButtonService) {
       MessageCenter.showMessage(response.data.message);
     });
   };
-
 }]);
-
-/* end of controllers.js */
 
 function showTestAttachment(node, event) {
   var link = $(node);
@@ -129,3 +130,5 @@ function showTestAttachment(node, event) {
   event.stopPropagation();
   event.preventDefault();
 }
+
+/* end of controllers.js */

@@ -133,6 +133,8 @@ app.config(function($stateProvider, $urlRouterProvider, $provide, $httpProvider)
     }
   };
 
+  // Routing helps you in dividing your application in logical views 
+  // and bind different views to Controllers.
   $stateProvider
     .state(addPatientState)
     .state(searchPatientsState)
