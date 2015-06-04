@@ -5,5 +5,12 @@
   },{
     "id": "Female", 
     "name": "Female"
+  }],
+  "facets": [{
+    "id": "city", 
+    "name": "City"
+  },{
+    "id": "gender", 
+    "name": "Gender"
   }]
 }

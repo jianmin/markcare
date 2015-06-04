@@ -14,7 +14,13 @@ var app = angular.module('MarkCareApp', ['ui.router', 'ui.bootstrap', 'ngTable',
 app.constant('AppConfig', { 
   'urls': {
     'upload': '/api/attachment/upload',
-    'download': '/api/attachment/download'
+    'download': '/api/attachment/download',
+    'simple_search': '/api/bbc/simple-search',
+    'faceted_search': '/api/bbc/faceted-search',
+    'persons': '/api/bbc/persons',
+    'person': '/api/bbc/person',
+    'loadhl7': '/api/bbc/load-hl7',
+    'removehl7': '/api/bbc/remove-hl7'
   },
   'DateFormat': 'yyyy-MM-dd',
   'TimeFormat': 'HH:mm'
@@ -28,7 +34,7 @@ app.config(function($stateProvider, $urlRouterProvider, $provide, $httpProvider)
     var url = $location.$$url;
     var $state = $injector.get('$state');
     if (url ==='' || url ==='/') {
-      $state.go('search');
+      $state.go('simple-search');
     } else {
       $state.go('error', {
         title: 'Page not found',
@@ -38,8 +44,8 @@ app.config(function($stateProvider, $urlRouterProvider, $provide, $httpProvider)
   });
 
   var addPatientState = {
-    name: 'add',
-    url: '/add',
+    name: 'add-patient',
+    url: '/add-patient',
     templateUrl: 'views/add-patient.html', 
     controller: 'AddPatientController',
     resolve: {
@@ -48,7 +54,6 @@ app.config(function($stateProvider, $urlRouterProvider, $provide, $httpProvider)
         if (registry)
           return registry;
         return PageService.getRegistry().then(function(response) {
-          console.log(response);
           return response.data.registry;
         });
       }
@@ -56,8 +61,8 @@ app.config(function($stateProvider, $urlRouterProvider, $provide, $httpProvider)
   };
 
   var searchPatientsState = {
-    name: 'search',
-    url: '/search',
+    name: 'search-patients',
+    url: '/search-patients',
     templateUrl: 'views/search-patients.html', 
     controller: 'SearchPatientsController',
     resolve: {
@@ -66,7 +71,6 @@ app.config(function($stateProvider, $urlRouterProvider, $provide, $httpProvider)
         if (registry)
           return registry;
         return PageService.getRegistry().then(function(response) {
-          console.log(response);
           return response.data.registry;
         });
       }
@@ -84,23 +88,35 @@ app.config(function($stateProvider, $urlRouterProvider, $provide, $httpProvider)
         if (registry)
           return registry;
         return PageService.getRegistry().then(function(response) {
-          console.log(response);
           return response.data.registry;
         });
       },
       Patient: function($stateParams, PatientService) {
         return PatientService.attachments($stateParams.ssn).then(function(response) {
-          console.log(response);
           return response.data.patient;
         });
       }
     }
   };
 
+  var loadHL7State = {
+    name: 'load-hl7',
+    url: '/load-hl7',
+    templateUrl: 'views/load-hl7.html', 
+    controller: 'HL7DataController'
+  };
+
+  var removeHL7State = {
+    name: 'remove-hl7',
+    url: '/remove-hl7',
+    templateUrl: 'views/remove-hl7.html', 
+    controller: 'HL7DataController'
+  };
+
   var aboutState = {
     name: 'about',
     url: '/about',
-    templateUrl: 'views/about.html', 
+    templateUrl: 'views/about.html'
   };
 
   var errorState = {
@@ -122,6 +138,55 @@ app.config(function($stateProvider, $urlRouterProvider, $provide, $httpProvider)
     .state(addPatientState)
     .state(searchPatientsState)
     .state(uploadFileState)
+    .state('faceted-search', {
+      url: '/faceted-search',
+      templateUrl: 'views/faceted-search.html',
+      controller: 'FacetedSearchController',
+      resolve: {
+        Registry: function(PageCache, PageService) {
+          var registry = PageCache.get('registry');
+          if (registry)
+            return registry;
+          return PageService.getRegistry().then(function(response) {
+            return response.data.registry;
+          });
+        }
+      }
+    })
+    .state('simple-search', {
+      url: '/simple-search',
+      templateUrl: 'views/simple-search.html',
+      controller: 'SimpleSearchController',
+      resolve: {
+        Registry: function(PageCache, PageService) {
+          var registry = PageCache.get('registry');
+          if (registry)
+            return registry;
+          return PageService.getRegistry().then(function(response) {
+            return response.data.registry;
+          });
+        }
+      }
+    })
+    .state('simple-search.male', {
+      url: '/male',
+      templateUrl: 'views/records.male.html'
+    })
+    .state('simple-search.female', {
+      url: '/female',
+      templateUrl: 'views/records.female.html'
+    })
+    .state('simple-search.all', {
+      url: '/all',
+      templateUrl: 'views/records.all.html'
+    })
+    .state('person', { 
+      url: '/person/:id',
+      templateUrl: 'views/person.html',
+      controller: 'PersonController'
+    })
+    .state(loadHL7State)
+    .state(removeHL7State)
     .state(aboutState)
     .state(errorState);
 });

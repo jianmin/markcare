@@ -199,4 +199,12 @@ function bytesToSize(bytes) {
   return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
 }
 
+function getSessionProperty(name) {
+  return window.sessionStorage.getItem(name);
+}
+
+function setSessionProperty(name, value) {
+  window.sessionStorage.setItem(name, value);
+}
+
 /* end of util.js */

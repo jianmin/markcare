@@ -34,6 +34,7 @@ exports.init = function(router) {
         button_save: res.__('button_save'),
         button_edit: res.__('button_edit'),
         button_delete: res.__('button_delete'),
+        button_remove: res.__('button_remove'),
         button_upload: res.__('button_upload'),
         button_search: res.__('button_search'),
 
@@ -71,7 +72,7 @@ exports.init = function(router) {
         gender: res.__('gender'),
         age: res.__('age'),
         dob: res.__('dob'),
-        address: res.__('address'),
+        city: res.__('city'),
         notes: res.__('notes'),
 
         file_name: res.__('file_name'),

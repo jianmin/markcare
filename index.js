@@ -25,6 +25,7 @@ var router = express.Router();
 
 var marklogic = require('marklogic');
 var dbconfig = require('./config/connection.js');
+//var sem = require("/marklogic/semantics.xqy");
 
 var root_directory = __dirname;
 
@@ -75,6 +76,10 @@ registry.init(router, root_directory, dbconfig);
 // Load the patient module
 var patient = require('./routes/patient.js');
 patient.init(router, root_directory, marklogic, dbconfig);
+
+// Load the Blue Button Connector module
+var bbc = require('./routes/bbc.js');
+bbc.init(router, root_directory, marklogic, dbconfig);
 
 // Load the version module
 require('./routes/version.js')(router);

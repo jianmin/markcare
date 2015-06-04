@@ -8,6 +8,7 @@
  * Description: The utils module
  */
 
+var fs = require('fs');
 var crypto = require('crypto');
 var path = require('path');
 var moment = require('moment');
@@ -43,6 +44,25 @@ var utils = {
     }
 
     return contentType;
+  },
+
+  // function to encode file data to base64 encoded string
+  base64_encode: function(file) {
+    // Read binary data
+    var bitmap = fs.readFileSync(file);
+
+    // Convert binary data to base64 encoded string
+    return new Buffer(bitmap).toString('base64');
+  },
+
+  // function to create file from base64 encoded string
+  base64_decode: function(base64str, file) {
+    // Create buffer object from base64 encoded string, it is important 
+    // to tell the constructor that the string is base64 encoded.
+    var bitmap = new Buffer(base64str, 'base64');
+
+    // Write buffer to file
+    fs.writeFileSync(file, bitmap);
   }
 }
 

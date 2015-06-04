@@ -20,10 +20,10 @@ exports.init = function(router, root_directory, dbconfig) {
       console.log('Error: ' + err);
     } else {
       registry = JSON.parse(data);
-      registry.server = {
-        host: dbconfig.server.host,
-        port: dbconfig.server.port,
-        user: dbconfig.server.user
+      registry.connection = {
+        host: dbconfig.connection.host,
+        port: dbconfig.connection.port,
+        user: dbconfig.connection.user
       };
     }
   });

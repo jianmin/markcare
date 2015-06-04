@@ -56,7 +56,7 @@ function($injector, $scope, $http, $stateParams, AppConfig, Registry, Patient, P
       dataType: 'json',
       uploadProgress: function(event, position, total, percentComplete) {
         var percentVal = 'Upload in progress ' + percentComplete + '%';
-        MessageCenter.showMessage(percentVal + ' ' + percentVal);
+        MessageCenter.showMessage(percentVal);
       },
       success: function(data) {
         MessageCenter.showMessage(data.message);

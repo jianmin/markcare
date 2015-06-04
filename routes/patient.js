@@ -21,6 +21,8 @@ var rmdir = require('rimraf');
 
 var Util = require('../util/utils.js');
 
+var PATIENT_DIRECTORY = '/patient/';
+
 var patientsDir = null;
 
 function getPatientHome(ssn) {
@@ -35,7 +37,7 @@ function getPatientUri(ssn) {
 // Retrieves a patient by ssn
 function selectPatient(ssn, data, callback, marklogic, dbconfig) {
   if (ssn) {
-    var db = marklogic.createDatabaseClient(dbconfig.server);
+    var db = marklogic.createDatabaseClient(dbconfig.connection);
     var qb = marklogic.queryBuilder;
 
     db.documents.query(
@@ -52,7 +54,7 @@ function selectPatient(ssn, data, callback, marklogic, dbconfig) {
         patient.gender     = document.content.gender;
         patient.age        = document.content.age;
         patient.dob        = document.content.dob;
-        patient.address    = document.content.address;
+        patient.city       = document.content.city;
 
         data.patient = patient;
         callback(null, data);
@@ -71,14 +73,13 @@ function selectPatient(ssn, data, callback, marklogic, dbconfig) {
 
 // Adds a new patient
 function insertPatient(req, res, data, callback, marklogic, dbconfig) {
-//console.log(data.patient);
   var ssn         = req.body.ssn;
   var first_names = req.body.first_name;
   var last_name   = req.body.last_name;
   var gender      = req.body.gender;
   var age         = req.body.age;
   var dob         = req.body.dob;
-  var address     = req.body.address;
+  var city        = req.body.city;
 
   // This is the key for the patient.
   var uri = getPatientUri(ssn);
@@ -91,12 +92,12 @@ function insertPatient(req, res, data, callback, marklogic, dbconfig) {
         gender: gender,
         age: age,
         dob: dob,
-        address: address
+        city: city
       }
     }
   ];
 
-  var db = marklogic.createDatabaseClient(dbconfig.server);
+  var db = marklogic.createDatabaseClient(dbconfig.connection);
 
   db.documents.write(patientDoc).result( 
     function(response) {
@@ -120,7 +121,7 @@ function updatePatient(req, res, callback, marklogic, dbconfig) {
   var gender      = req.body.gender;
   var age         = req.body.age;
   var dob         = req.body.dob;
-  var address     = req.body.address;
+  var city        = req.body.city;
 
   // This is the primary key for the patient.
   var uri = getPatientUri(ssn);
@@ -133,12 +134,12 @@ function updatePatient(req, res, callback, marklogic, dbconfig) {
         gender: gender,
         age: age,
         dob: dob,
-        address: address
+        city: city
       }
     }
   ];
 
-  var db = marklogic.createDatabaseClient(dbconfig.server);
+  var db = marklogic.createDatabaseClient(dbconfig.connection);
 
   db.documents.write(patientDoc).result( 
     function(response) {
@@ -151,43 +152,17 @@ function updatePatient(req, res, callback, marklogic, dbconfig) {
 }
 
 // Processes search request
-function processSearchRequest(params, res, marklogic, dbconfig) {
-  //console.log("---->processSearchRequest");
-  //console.log(params);
-
+function performSimpleSearch(params, res, marklogic, dbconfig) {
+  var q = params['q'];
   var patients = [];
-  var criteria = {};
-
-  // The ssn param
-  var ssn = params['ssn'];
-  if (ssn) {
-    criteria.ssn = ssn;
-  }
-
-  // The first_name param
-  var first_name = params['first_name'];
-  if (first_name) {
-    criteria.first_name = first_name;
-  }
-
-  // The last_name param
-  var last_name = params['last_name'];
-  if (last_name) {
-    criteria.last_name = last_name;
-  }
-
-  // The gender param
-  var gender = params['gender[]'];
-  if (gender) {
-    // TO DO
-  }
-
-  var db = marklogic.createDatabaseClient(dbconfig.server);
+  var db = marklogic.createDatabaseClient(dbconfig.connection);
   var qb = marklogic.queryBuilder;
 
-  // Query documents with Query By Example
   db.documents.query(
-    qb.where(qb.byExample(criteria))
+    qb.where(
+      qb.directory(PATIENT_DIRECTORY), 
+      qb.parsedFrom(q)
+    )
   ).result(function(documents) {
     documents.forEach( function(document) {
       var patient = {};
@@ -199,7 +174,7 @@ function processSearchRequest(params, res, marklogic, dbconfig) {
       patient.gender     = document.content.gender;
       patient.age        = document.content.age;
       patient.dob        = document.content.dob;
-      patient.address    = document.content.address;
+      patient.city       = document.content.city;
 
       patients.push(patient);
     });
@@ -335,7 +310,7 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
   router.route('/patient/:ssn').delete(function(req, res) {
     var ssn = req.params.ssn;
     var uri = '/patient/' + ssn + '.json';
-    var db = marklogic.createDatabaseClient(dbconfig.server);
+    var db = marklogic.createDatabaseClient(dbconfig.connection);
 
     // Removes a patient document by uri
     db.documents.remove(uri).result(function(response) {
@@ -353,12 +328,12 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
 
   // Returns all patients
   router.route('/patients').get(function(req, res){
-    processSearchRequest(req.body, res, marklogic, dbconfig);
+    performSimpleSearch(req.body, res, marklogic, dbconfig);
   });
 
   // Searchs patients
   router.route('/patients').post(function(req, res) {
-    processSearchRequest(req.body, res, marklogic, dbconfig);
+    performSimpleSearch(req.body, res, marklogic, dbconfig);
   });
 
   // Retrieves test results by ssn

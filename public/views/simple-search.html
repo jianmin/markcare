@@ -1,0 +1,67 @@
+<h1 class="page-title">Simple Search</h1>
+
+<p>A string query is a plain text search string composed of terms, phrases, and operators.</p>
+
+<p>For example, 'cat AND dog' is a string query for finding documents 
+   that contain both the term 'cat' and the term 'dog'.</p>
+
+<p>This view allows you to locate and get your health records.</p>
+
+<div class="row">
+  <div class="col-lg-12">         
+    <form class="col-lg-12 search-form">
+      <div class="input-group" style="width:570px;margin:0;">
+        <input id="q" name="q" class="form-control input-lg" 
+               data-ng-model="q"
+               onkeydown="filterSearchInput(event,this)"
+               placeholder="Search for health records" type="text" />
+        <span class="input-group-btn">
+          <button class="btn btn-lg btn-primary" type="button" data-ng-click="performSearch()">
+            <i class="fa fa-search"></i>
+          </button>
+        </span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="bb-results" data-ng-if="cloned_persons.length>0">
+  <p>Filter by Gender</p>
+  <ul class="quick-actions">
+    <li ng-class="{current:isCurrent('male')}">
+      <a data-ng-click="setGenderFilter('Male')" ui-sref=".male" href="#/records/male"><i class="fa fa-male isize-36"></i>Male</a>
+    </li>
+    <li ng-class="{current:isCurrent('female')}">
+      <a data-ng-click="setGenderFilter('Female')" ui-sref=".female" href="#/records/female"><i class="fa fa-female isize-36"></i>Female</a>
+    </li>
+    <li ng-class="{current:isCurrent('all')}">
+      <a data-ng-click="setGenderFilter('')" ui-sref=".all" href="#/records/all"><i class="fa fa-group isize-36"></i>Both</a>
+    </li>
+  </ul>
+
+  <ul class="person-list">
+    <li class="person-box" ng-repeat="person in persons">
+      <a class="box" ui-sref="person({id: person.id})">
+        <div class="person-image-container">
+          <div class="person-image" style="background-image:url(/public/images/{{person.gender}}.png)"></div>
+        </div>
+
+        <span class="name-container">
+          <span class="title">{{person.first_name}} {{person.last_name}} - {{person.city}}</span>
+        </span>
+
+        <div class="demog-container">
+          <img class="demog-thumb" src="/public/images/person.png" />
+          <span class="demog-name">{{person.gender}}</span>
+          <span class="demog-dob">{{formatDatetime(person.dob)}}</span>
+        </div>
+
+        <div class="test-container">
+          <span class="gray">Test Results: {{person.total_results}}</span>
+        </div>
+      </a>
+    </li>
+  </ul>
+
+  <div ui-view></div>
+</div>

@@ -231,6 +231,11 @@ function($injector, $scope, $http, $filter, AppConfig, PageCache, PageService, P
       return '';
   };
 
+  $scope.formatDatetime = function(s) {
+    // 1975-05-01T00:00:00.000Z
+    return MarkCare.Util.formatDatetime(s, 'YYYY-MM-DD HH:mm A Z');
+  };
+
   // Kick off
   this.init();
 }]);

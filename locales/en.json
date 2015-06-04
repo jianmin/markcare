@@ -12,6 +12,7 @@
   "button_save": "Save",
   "button_edit": "Edit",
   "button_delete": "Delete",
+  "button_remove": "Remove",
   "button_upload": "Upload",
   "button_search": "Search",
 
@@ -28,7 +29,7 @@
 
   "menu_add_patient": "Add Patient",
   "menu_search_patients": "Search Patients",
-  "menu_about": "About MakrCare",
+  "menu_about": "About Blue Button",
 
   "add_patient": "Add Patient",
   "edit_patient": "Edit Patient",
@@ -50,7 +51,7 @@
   "gender": "Gender",
   "age": "Age",
   "dob": "Date of Birth",
-  "address": "Address",
+  "city": "City",
   "notes": "Notes",
 
   "file_name": "File Name",

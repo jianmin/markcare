@@ -39,6 +39,8 @@ h1 {
 
   padding-top: 0;
   padding-bottom: 0.273em;
+
+  color: #003366;
 }
 
 /* Removing the dotted outline */
@@ -135,14 +137,17 @@ div.divider {
 }
 
 .navbar-header img {
-  width: 96px;
-  /*height: 46px;*/
+  width: 197px;
+  height: 30px;
+  display: inline-block;
 }
 
 .navbar-inverse .logo-text {
   margin-left: 1px;
   font-weight: normal;
   color: yellow;
+  padding: 10px 0 0 10px;
+  vertical-align: middle;
 }
 
 .navbar-inverse {

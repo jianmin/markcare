@@ -27,6 +27,8 @@ function($injector, $scope, $http, $filter, NgTableParams, Registry, PatientServ
   // This array keeps the search results
   $scope.patients = [];
 
+  $scope.q = 'liu';
+
   this.init = function() {
     //this.createTable();
   };
@@ -56,26 +58,30 @@ function($injector, $scope, $http, $filter, NgTableParams, Registry, PatientServ
   };
 
   $scope.search = function() {
-    var formId = '#search-form';
-    var params = jQuery(formId).serialize();
+    if ($scope.q) {
+      var params = 'q=' + encodeURIComponent($scope.q);
 
-    MarkCare.Util.showPageLoader();
+      MarkCare.Util.showPageLoader();
 
-    PatientService.search(params).then(function(response) {
-      MarkCare.Util.hidePageLoader();
+      PatientService.search(params).then(function(response) {
+        MarkCare.Util.hidePageLoader();
 
-      $scope.patients.length = 0;
+        $scope.patients.length = 0;
 
-      if (response.data.success) {
-        angular.extend($scope.patients, response.data.patients);
-        $scope.$broadcast('SearchResults', response.data.patients);
-      } else {
-        MessageCenter.showMessage(response.data.message);
-      }
+        if (response.data.success) {
+          angular.extend($scope.patients, response.data.patients);
+          $scope.$broadcast('SearchResults', response.data.patients);
+        } else {
+          MessageCenter.showMessage(response.data.message);
+        }
 
-      //$scope.tableParams.total($scope.patients.length);
-      //$scope.tableParams.reload();
-    });
+        //$scope.tableParams.total($scope.patients.length);
+        //$scope.tableParams.reload();
+      });
+    } else {
+      jQuery('#q').focus();
+      MessageCenter.showMessage('Please enter search keywords');
+    }
   };
 
   $scope.setupSearchForm = function() {

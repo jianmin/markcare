@@ -1,0 +1,77 @@
+<h1 class="page-title">Your Health Records</h1>
+
+<p>Blue Button is a way you can access your health records electronically.</p>
+
+<p><b>ID</b>: {{person.id}}</p>
+<p><b>First Name</b>: {{person.first_name}}</p>
+<p><b>Last Name</b>: {{person.last_name}}</p>
+<p><b>DOB</b>: {{formatDatetime(person.dob)}}</p>
+<p><b>Gender</b>: {{person.gender}}</p>
+<p><b>City</b>: {{person.city}}</p>
+
+<div class="accordion" data-ng-repeat="rs in person.results">
+  <div id="accordion_heading_{{$index}}" class="accordion-heading accordion-border">
+    <table>
+      <tbody>
+        <tr>
+          <td class="accordion-title">
+            <a data-ng-click="accordion($index)">
+              <i id="accordion_handle_{{$index}}" class="fa fa-plus-square"></i>
+            </a><b>Result Set</b>: {{rs.result_set.name}}
+          </td>
+          <td class="accordion-meta"><b>Total Results</b>: {{rs.results.length}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="accordion_body_{{$index}}" class="accordion-body accordion-border-bottom">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Test Name</th>
+            <th>Status</th>
+            <th>Unit</th>
+            <th>Value</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="test in rs.results">
+            <td>{{test.result.name}}</td>
+            <td>{{test.status}}</td>
+            <td>{{test.unit}}</td>
+            <td>
+              <div ng-switch on="test.type">
+                <a ng-switch-when="RP" href="#" 
+                   onclick="showTestAttachment(this,event)" 
+                   data-featherlight="#mylightbox{{$index}}">
+                  <span>View attachment</span>
+                  <div id="mylightbox{{$index}}" class="mylightbox">
+                    <p><img src="{{test.value}}" /></p>
+                    <p>{{test.result.name}}</p>
+                  </div>
+                </a>
+                <a ng-switch-when="ED" href="#" 
+                   onclick="showTestAttachment(this,event)" 
+                   data-featherlight="#mylightbox{{$index}}">
+                  <span>View Base64 data</span>
+                  <div id="mylightbox{{$index}}" class="mylightbox">
+                    <p>{{test.value}}</p>
+                    <p>{{test.result.name}}</p>
+                  </div>
+                </a>
+                <span ng-switch-default>{{test.value}}</span>
+              </div>
+            </td>
+            <td>{{formatDatetime(test.date_time.point.date)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<p style="margin-top:10px;">
+  <a href="#"><img src="/public/images/bluebutton-text-logo.png" class="bb-big-logo" /></a>
+</p>

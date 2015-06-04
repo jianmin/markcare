@@ -1,0 +1,52 @@
+<h1 class="page-title">Faceted Search</h1>
+
+<p>This application has defined three search facets: City, Gender, and Age.</p>
+<p>Please select a facet to start your search.</p>
+
+<div class="row">
+  <div class="col-lg-12">         
+    <form class="col-lg-12 search-form">
+      <div class="form-group" style="width:570px;margin:0;">
+        <select class="form-control" 
+                data-ng-change="performSearch()"
+                data-ng-model="facet_model" 
+                data-ng-options="item.name for item in registry.facets">
+          <option value="">Select a facet...</option>
+        </select>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="container" style="min-width: 570px; height: 300px; max-width: 300px; margin-top: 15px;"></div>
+
+</p>
+
+<div class="bb-results" data-ng-if="persons.length>0">
+  <p>Results</p>
+  <ul class="person-list">
+    <li class="person-box" ng-repeat="person in persons">
+      <a class="box" ui-sref="person({id: person.id})">
+        <div class="person-image-container">
+          <div class="person-image" style="background-image:url(/public/images/{{person.gender}}.png)"></div>
+        </div>
+
+        <span class="name-container">
+          <span class="title">{{person.first_name}} {{person.last_name}} - {{person.city}}</span>
+        </span>
+
+        <div class="demog-container">
+          <img class="demog-thumb" src="/public/images/person.png" />
+          <span class="demog-name">{{person.gender}}</span>
+          <span class="demog-dob">{{formatDatetime(person.dob)}}</span>
+        </div>
+
+        <div class="test-container">
+          <span class="gray">Test Results: {{person.total_results}}</span>
+        </div>
+      </a>
+    </li>
+  </ul>
+
+  <div ui-view></div>
+</div>

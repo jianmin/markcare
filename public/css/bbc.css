@@ -1,0 +1,320 @@
+/*
+ * @(#)bbc.css
+ */
+
+/*
+ * Styling the Blue Button Connector.
+ *
+ * Author: Jianmin Liu
+ * Created: 2015/05/29
+ */
+
+.isize-36 {
+  width: 38px;
+  height: 38px;
+}
+
+.quick-actions {
+  display: inline-block;
+  list-style: none outside none;
+  margin: 0 0 10px;
+  text-align: center;
+  padding: 0;
+}
+
+.quick-actions li {
+  background-color: #fafafa;
+  background-image: -webkit-linear-gradient(top, #fafafa 0%, #f2f2f2 100%);
+  background-image: linear-gradient(to bottom, #fafafa 0%, #f2f2f2 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffafafa', endColorstr='#fff2f2f2', GradientType=0);
+}
+
+.quick-actions li {
+  border: 1px solid #d5d5d5;
+  border-radius: 4px 4px 4px 4px;
+  -webkit-box-shadow: 0 1px 0 0 #FFFFFF inset, 0 1px 0 rgba(255,255,255,0.4);
+  box-shadow: 0 1px 0 0 #FFFFFF inset, 0 1px 0 rgba(255,255,255,0.4);
+  display: inline-block;
+  line-height: 18px;
+  margin: 0 10px 10px 0;
+  padding: 0;
+  min-width: 140px;
+}
+
+.quick-actions li:hover {
+  text-decoration: none;
+  border-color: #a5a5a5;
+  color: #444;
+  text-shadow: 0 1px 0 #fff;
+  -webkit-box-shadow: 0 0 3px rgba(0,0,0,0.25);
+  -moz-box-shadow: 0 0 3px rgba(0,0,0,0.25);
+  box-shadow: 0 0 3px rgba(0,0,0,0.25)
+}
+
+.quick-actions li.current {
+  background: #ffd;
+  border-color: #a5a5a5;
+  border-width: 2px;
+}
+
+.quick-actions li a {
+  text-align: center !important;
+  display: block;
+  color: #666666;
+  text-shadow: 0 1px 0 #ffffff;
+}
+
+.quick-actions li a {
+  padding: 10px 30px;
+  text-decoration: none;
+}
+
+.quick-actions li i {
+  display: inline-block;
+  margin-right: 5px ;
+  background: #eee ;
+  color: #888;
+  width: 38px;
+  height: 38px;
+  line-height: 38px;
+  text-align: center;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+
+  /*background-color: #004FA7;*/
+  color: #E05314;
+}
+
+.bb-results {
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.greencolor {
+  color: #5cb85c;
+}
+
+.redcolor {
+  color: red;
+}
+
+/* person box wrapper */
+ul.person-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+
+  text-align: left;
+  width: auto;
+
+  overflow: hidden;
+
+  /*display: block;
+  float: left;*/
+
+  /*display: flex;
+  flex-flow: row;
+  align-items: center;*/
+}
+
+/* Too narrow to support mutiple items */
+@media all and (max-width: 640px) {  
+  ul.person-list {
+    -webkit-flex-flow: column;
+    flex-flow: column;
+    flex-direction: column;
+  }
+}
+
+li.person-box {
+  display: inline-block;
+  position: relative;
+
+  width: 270px;
+
+  vertical-align: top;
+  border: 0px solid #ddd; 
+  background: #fff;
+  margin: 0 10px 10px 0;
+  overflow: hidden;
+  text-align: left;
+}
+
+li.person-box a.box {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+  padding: 0px;
+  border: 4px solid #ddd;
+  border-radius: 4px;
+  text-decoration: none;
+  background: #fff;
+  cursor: default;
+}
+
+li.person-box:hover a.box {
+  padding: 0px;
+  border-width: 4px;
+  border-color: #005E80;
+  text-decoration: none;
+
+  /* change the background */
+  background: #f5f5f5;
+  /*opacity:.15;*/
+}
+
+li.person-box div.person-image-container {
+  display: block;
+  max-height: 151px;
+  padding: 6px;
+}
+
+div.person-image {
+  width: 100%;
+  height: 151px;
+
+  background-position: center;
+  background-size: cover;
+  overflow: hidden;
+}
+
+/* name-container */
+li.person-box .name-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  flex: 1;
+  min-width: 1px;
+  padding: 10px;
+}
+
+li.person-box .name-container .title {
+  display: block;
+  color: #701f3f; /*#444*/
+  font-size: 16px;
+  line-height: 1.3;
+  overflow: hidden;
+  padding-right: 25px;
+
+  font-weight: 700;
+}
+
+/* demog-container */
+li.person-box .demog-container {
+  display: block;
+  margin: 0 10px;
+  overflow: hidden;
+  padding: 1px 0;
+}
+
+li.person-box .demog-container .demog-thumb {
+  float: left;
+  width: 25px;
+  margin-right: 5px;
+}
+
+li.person-box .demog-container .demog-name {
+  color: #4D4D4D;
+  display: inline-block;
+  line-height: 1;
+}
+
+li.person-box .demog-container .demog-dob {
+  color: #4D4D4D;
+  font-size: 10px;
+}
+
+/* test-container */
+li.person-box .test-container {
+  display: block;
+  font-size: 12px;
+  text-align: left;
+  padding: 10px;
+  border-top: 1px solid #eee;
+  color: #9b9b9b;
+  margin: 10px 0 0;
+  line-height: 1.2;
+}
+
+li.person-box .test-container .gray {
+  display: block;
+  margin-bottom: 4px;
+  color: #1A1A1A;
+  font-weight: 600;
+}
+
+img.bb-big-logo {
+  width: 500px;
+  height: 200px;
+}
+
+img.bb-little-logo {
+  width: 56px;
+  height: 56px;
+  margin-right: 8px;
+  margin-left: -5px;
+}
+
+.tt-input {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-box-shadow: inset 0 4px 2px #eee;
+  -webkit-box-shadow: inset 0 4px 2px #eee;
+  box-shadow: inset 0 4px 2px #eee;
+  width: -moz-calc(100% - 20px);
+  width: -webkit-calc(100% - 20px);
+  width: calc(100% - 20px);
+
+  /*height: 40px;*/
+
+  font-size: 1.1em;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 3px;
+  border: 2px solid #ccc;
+  color: #3d3e3f;
+}
+
+.search-form {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+ .mylightbox {
+  display: none;
+}
+
+/* lighbox */
+
+.featherlight:last-of-type {
+  background: rgba(255,255,255,0.2) !important;
+}
+
+.featherlight .featherlight-inner {
+  display: block !important;
+  border: solid 5px #000 !important;
+  border-bottom: solid 5px #000 !important;
+  max-width: 540px;
+  padding: 20px 20px 0;
+  border-radius: 4px;
+  background: #fff;
+ }
+
+.featherlight .featherlight-close-icon {
+  top: 3px !important;
+  right: 3px !important;
+  line-height: 16px !important;
+  width: 32px !important;
+  font-size: 23px;
+  background: #fff !important;
+  border-radius: 20px;
+  color: #000 !important;
+  padding: 6px;
+  border: 1px solid #000;
+}
+
+/* end of bbc.css */
