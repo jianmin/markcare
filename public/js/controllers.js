@@ -32,8 +32,8 @@ function($injector, $scope, $http, PageCache) {
   this.init();
 }]);
 
-app.controller('PersonController', ['$injector', '$scope', '$http', '$stateParams', 'BlueButtonService', 
-function($injector, $scope, $http, $stateParams, BlueButtonService) {
+app.controller('PersonController', ['$injector', '$scope', '$http', '$stateParams', 'AppConfig', 'BlueButtonService', 
+function($injector, $scope, $http, $stateParams, AppConfig, BlueButtonService) {
   $injector.invoke(MyParentController, this, {
     $scope: $scope,
     $http: $http
@@ -52,6 +52,28 @@ function($injector, $scope, $http, $stateParams, BlueButtonService) {
       MessageCenter.showMessage(response.data.message);
     }
   });
+
+  $scope.showRecords = function() {
+    $scope.showModal('#json-dialog');
+
+    var targetNode = document.getElementById('json-viewer');
+    targetNode.innerHTML = ""; 
+
+    var value = JSON.stringify($scope.person, null, 2); 
+    var codeMirrorEditor = CodeMirror(targetNode, {
+      value: value,
+      indentUnit: 4,
+      lineNumbers: true,
+      matchBrackets: true,
+      readOnly: true,
+      mode: 'text/javascript'
+    });
+  };
+
+  $scope.downloadRecords = function() {
+    var url = AppConfig.urls.download + '/' + $scope.person.id;
+    window.location = url;
+  };
 }]);
 
 app.controller('HL7DataController', ['$injector', '$scope', '$http', 'BlueButtonService', 

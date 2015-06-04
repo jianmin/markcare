@@ -130,7 +130,11 @@ function selectOnePerson(id, data, callback, marklogic, dbconfig) {
   var db = marklogic.createDatabaseClient(dbconfig.connection);
   var qb = marklogic.queryBuilder;
 
-  db.documents.query(qb.where(qb.byExample({id: id}))).result(function(documents) {
+  db.documents.query(
+    qb.where(
+      qb.byExample({id: id})
+    )
+  ).result(function(documents) {
     documents.forEach(function(document) {
       if (documents.length === 1) {
         var document = documents[0];
@@ -198,7 +202,9 @@ function insertHL7Message(hl7data, marklogic, dbconfig, res, count) {
   db.documents.write(hl7doc).result( 
     function(response) {
       if (res) {
-        var msg = (count > 1) ? (count + ' HL7 messages have been loaded.') : 'One HL7 message has been loaded.';
+        var msg = (count > 1) ? 
+          (count + ' HL7 messages have been loaded.') : 
+          'One HL7 message has been loaded.';
         res.json({
           success: true,
           message: msg
@@ -232,11 +238,11 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
       function(callback) {
         selectOnePerson(id, data, callback, marklogic, dbconfig);
       }
-    ], function(err, result) {   
-      if (err) {
+    ], function(error, result) {   
+      if (error) {
         res.json({
           success: false,
-          message: err.message
+          message: error.message
         });
       } else {
         res.json({
@@ -244,6 +250,36 @@ exports.init = function(router, root_directory, marklogic, dbconfig) {
           message: 'OK',
           person: result.person
         });
+      }
+    });
+  });
+
+  // Downloads a file
+  router.route('/bbc/download/:id').get(function(req, res) {
+    var id = req.params.id;
+    var data = {};
+
+    async.waterfall([
+      function(callback) {
+        selectOnePerson(id, data, callback, marklogic, dbconfig);
+      }
+    ], function(error, result) {   
+      if (error) {
+        res.writeHead(404, {'Content-Type': 'text/plain'});
+        res.end('404 Not Found');
+      } else {
+        var person = result.person;
+        var fileName = person.id + '.json';
+        var contentType = 'application/json';
+        var contentDisposition = 'attachment;filename=' + fileName;
+
+        res.writeHead(200, {
+          'Content-Type': contentType,
+          'Content-Disposition': contentDisposition
+        });
+
+        res.write(JSON.stringify(person, null, 2));
+        res.end();
       }
     });
   });

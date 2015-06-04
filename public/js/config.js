@@ -13,10 +13,9 @@ var app = angular.module('MarkCareApp', ['ui.router', 'ui.bootstrap', 'ngTable',
 
 app.constant('AppConfig', { 
   'urls': {
-    'upload': '/api/attachment/upload',
-    'download': '/api/attachment/download',
     'simple_search': '/api/bbc/simple-search',
     'faceted_search': '/api/bbc/faceted-search',
+    'download': '/api/bbc/download',
     'persons': '/api/bbc/persons',
     'person': '/api/bbc/person',
     'loadhl7': '/api/bbc/load-hl7',

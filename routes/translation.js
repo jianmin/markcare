@@ -36,6 +36,7 @@ exports.init = function(router) {
         button_delete: res.__('button_delete'),
         button_remove: res.__('button_remove'),
         button_upload: res.__('button_upload'),
+        button_download: res.__('button_download'),
         button_search: res.__('button_search'),
 
         settings: res.__('settings'),

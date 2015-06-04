@@ -73,5 +73,26 @@
 </div>
 
 <p style="margin-top:10px;">
-  <a href="#"><img src="/public/images/bluebutton-text-logo.png" class="bb-big-logo" /></a>
+  <a href="javascript:void(0)" data-ng-click="showRecords()">
+    <img src="/public/images/bluebutton-text-logo.png" class="bb-big-logo" /></a>
 </p>
+
+<div id="json-dialog" class="modal modal-wide" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Health Records for {{person.first_name}} {{person.last_name}}</h4>
+      </div>
+      <div class="modal-body"><div id="json-viewer"></div></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-ng-click="downloadRecords()">
+          <span class="fa fa-check"></span> {{ui.button_download}}
+        </button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          <span class="fa fa-close"></span> {{ui.button_close}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

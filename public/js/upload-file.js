@@ -12,11 +12,10 @@ app.controller('UploadFileController', [
   '$scope', 
   '$http', 
   '$stateParams',
-  'AppConfig',
   'Registry', 
   'Patient', 
   'PatientService',
-function($injector, $scope, $http, $stateParams, AppConfig, Registry, Patient, PatientService) {
+function($injector, $scope, $http, $stateParams, Registry, Patient, PatientService) {
   // Use the $injector to pull in parent definitions.
   $injector.invoke(MyParentController, this, {
     $scope: $scope,
@@ -35,7 +34,8 @@ function($injector, $scope, $http, $stateParams, AppConfig, Registry, Patient, P
   $scope.logo.filename = $scope.ui.no_file_chosen;
   $scope.logo.show_upload_button = false;
 
-  $scope.upload_action = AppConfig.urls.upload;
+  $scope.upload_action = '/api/attachment/upload';
+  $scope.download_action = '/api/attachment/download';
 
   $scope.onFileSelected = function(pathname) {
     MessageCenter.clearMessage();
@@ -77,9 +77,7 @@ function($injector, $scope, $http, $stateParams, AppConfig, Registry, Patient, P
   };
 
   $scope.downloadFile = function(filename) {
-    var url = AppConfig.urls.download + '/' + $scope.patient.ssn + '/' + encodeURIComponent(filename);
-
-    // You can't download file through Ajax.
+    var url = $scope.download_action + '/' + $scope.patient.ssn + '/' + encodeURIComponent(filename);
     window.location = url;
   };
 

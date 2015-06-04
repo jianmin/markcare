@@ -27,7 +27,7 @@ function($injector, $scope, $http, $filter, NgTableParams, Registry, PatientServ
   // This array keeps the search results
   $scope.patients = [];
 
-  $scope.q = 'liu';
+  $scope.q = '';
 
   this.init = function() {
     //this.createTable();
@@ -85,7 +85,6 @@ function($injector, $scope, $http, $filter, NgTableParams, Registry, PatientServ
   };
 
   $scope.setupSearchForm = function() {
-    jQuery('#gender-selector').multiselect({includeSelectAllOption: true, nonSelectedText: 'No genders selected...'});
   };
 
   $scope.$on('PatientUpdated', function(event, args) {

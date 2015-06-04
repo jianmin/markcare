@@ -24,7 +24,7 @@ function($injector, $scope, $http, $filter, $location, AppConfig, PageCache, Reg
   });
 
   $scope.registry = Registry;
-  $scope.q = 'liu';
+  $scope.q = '';
   $scope.cloned_persons = null;
   $scope.persons = [];
 

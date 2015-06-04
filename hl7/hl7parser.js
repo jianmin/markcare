@@ -76,7 +76,7 @@ function results_observation(obx) {
 
   obs.type = obx["Value Type"][0][0];
 
-  obs.status = "completed"; 
+  obs.status = "completed"; //or obx["Observ Result Status"][0][0]; // ="F"?
 
   obs.value = obx["Observation Value"][0][0];
   // Units can be coded entry(CE)
